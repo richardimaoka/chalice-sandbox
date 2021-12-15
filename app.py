@@ -1,5 +1,6 @@
 from chalice import Chalice
 from chalice import BadRequestError
+from chalice import NotFoundError
 
 app = Chalice(app_name='helloworld')
 
@@ -35,6 +36,23 @@ def put_test(value):
 @app.route('/myview', methods=['POST', 'PUT'])
 def myview():
     pass
+
+
+OBJECTS = {
+}
+
+
+@app.route('/objects/{key}', methods=['GET', 'PUT'])
+def myobject(key):
+    request = app.current_request
+    if request.method == 'PUT':
+        OBJECTS[key] = request.json_body
+    elif request.method == 'GET':
+        try:
+            return {key: OBJECTS[key]}
+        except KeyError:
+            raise NotFoundError(key)
+
 # The view function above will return {"hello": "world"}
 # whenever you make an HTTP GET request to '/'.
 #
