@@ -14,6 +14,9 @@ def index():
     return {'hello': 'world'}
 
 
+app.debug = True
+
+
 @app.route('/cities/{city}')
 def state_of_city(city):
     return {'state': CITIES_TO_STATE[city]}
